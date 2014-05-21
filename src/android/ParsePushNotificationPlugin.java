@@ -1,4 +1,4 @@
-package com.stratogos.cordova.parsePushNotifications;
+package com.ym.parsepushnotification;
 
 import java.util.Set;
 
@@ -42,22 +42,22 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 
         if (action.equalsIgnoreCase("register")){
 
-            //JSONObject params = args.optJSONObject(0);
+            JSONObject params = args.optJSONObject(0);
 
-            // Parse.initialize(getApplicationContext(), params.optString("appId",""), params.optString("clientKey", ""));
-            // PushService.setDefaultPushCallback(getApplicationContext() ,PushHandlerActivity.class);
-            // ParseInstallation.getCurrentInstallation().saveInBackground();
-
-            callbackContext.success();
+            Parse.initialize(getApplicationContext(), params.optString("appId",""), params.optString("clientKey", ""));
+            PushService.setDefaultPushCallback(getApplicationContext(), cordova.getActivity().getClass());
+            ParseInstallation.getCurrentInstallation().saveInBackground();
 
             canDeliverNotifications = true;
 
-            cordova.getThreadPool().execute(new Runnable() {
+            callbackContext.success();
+
+            /*cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
                     flushCallbackQueue();
                 }
-            });
+            });*/
 
 
             return true;
@@ -95,7 +95,7 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 
             String channel = args.optString(0);
 
-            PushService.subscribe(getApplicationContext(),channel, PushHandlerActivity.class);
+            PushService.subscribe(getApplicationContext(), channel, cordova.getActivity().getClass());
 
             callbackContext.success();
 
@@ -118,9 +118,9 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
     /*
      * Sends a json object to the client as parameter to a method which is defined in gECB.
      */
-    public static void NotificationReceived(String json, boolean receivedInForeground) {
+    public static void NotificationReceived(String json) {
 
-        String state = receivedInForeground ? "foreground" : "background";
+        String state = isInForeground ? "foreground" : "background";
 
         Log.v(TAG, "state: " + state + ", json:" + json);
 
@@ -168,7 +168,7 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 
         }catch(JSONException e){}
 
-        String js = "javascript:setTimeout(function(){window.plugin.parse_push.ontrigger('" + state + "',"+ json +")},0)";
+        String js = "javascript:setTimeout(function(){window.parsePush.onNotificationReceived('" + state + "',"+ json +")},0)";
 
         if (canDeliverNotifications) {
             gWebView.sendJavascript(js);
