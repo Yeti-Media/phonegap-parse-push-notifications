@@ -73,7 +73,7 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
         else if (action.equalsIgnoreCase("getInstallationId")){
 
             // no installation tokens on android
-            callbackContext.success();
+            callbackContext.success(ParseInstallation.getCurrentInstallation().getObjectId());
 
             return true;
         }
