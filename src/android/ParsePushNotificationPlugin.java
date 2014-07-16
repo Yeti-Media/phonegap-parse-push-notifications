@@ -42,12 +42,6 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 
         if (action.equalsIgnoreCase("register")){
 
-            JSONObject params = args.optJSONObject(0);
-
-            Parse.initialize(getApplicationContext(), params.optString("appId",""), params.optString("clientKey", ""));
-            PushService.setDefaultPushCallback(getApplicationContext(), cordova.getActivity().getClass());
-            ParseInstallation.getCurrentInstallation().saveInBackground();
-
             canDeliverNotifications = true;
 
             callbackContext.success();
