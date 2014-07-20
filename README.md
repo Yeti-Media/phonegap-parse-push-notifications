@@ -22,7 +22,10 @@ Note that, as the time of the writing, the current version of phonegap does not 
 After the device ready event, call the registration method on the plugin
 
 ```javascript
-parsePush.register(null, function() {
+parsePush.register({
+  appId: "ParseAppId",
+  clientKey: "ParseAppClientKey"
+}, function() {
   alert("Parse Push plugin failed");
 });
 ```
