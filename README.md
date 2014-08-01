@@ -5,11 +5,18 @@ Phonegap Parse Push Notifications
 
 ##Setup
 
+For iOS, include this file in your index.html
+```html5
+<script src="parsePushNotification.js"></script>
+```
+Then follow these instructions:
+[Parse iOS Push Notifications](https://parse.com/tutorials/ios-push-notifications)
+
 For Android, in addition to adding the plugin, you need to add the following code to the `onCreate()` method of your Application class, with the Parse app´s id and client key.  
 
 ```java
 Parse.initialize(this, "ParseAppId", "ParseAppClientKey");
-PushService.setDefaultPushCallback(this, WHATA.class);
+PushService.setDefaultPushCallback(this, Your.class);
 ParseInstallation.getCurrentInstallation().saveInBackground();
 ```
 
